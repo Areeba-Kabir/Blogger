@@ -1,16 +1,17 @@
 const express = require('express');
 const connection = require('./connection');
 const blogroute = require('./Router/blogroutes.js');
-const router = require('./Router/blogroutes.js');
-
+const bloglogs = require('./Middleware/bloglog.js');
+const app = express();
 
 connection().then(
     () => {
         console.log('Connected to database');
-        const app = express();
-        app.use(express.json());
 
+        app.use(express.json());
         app.use('/api/blog', blogroute);
+        app.use(express.urlencoded({ extended: false }));
+        app.use(bloglogs('logs.txt'));
 
         const port = process.env.PORT || 3000;
         app.listen(port, () => {
