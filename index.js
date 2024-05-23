@@ -5,19 +5,19 @@ const router = require('./Router/blogroutes.js');
 
 
 connection().then(
-    (res) => {
+    () => {
         console.log('Connected to database');
+        const app = express();
+        app.use(express.json());
+
+        app.use('/api/blog', blogroute);
+
+        const port = process.env.PORT || 3000;
+        app.listen(port, () => {
+            console.log(`server listening on PORT: ${port}`)
+        })
     }
-).catch((err) => {
+).catch(() => {
     console.log('error connecting to db')
 })
 
-const app = express();
-app.use(express.json());
-
-app.use('/api/blog', blogroute);
-
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-       console.log(`server listening on PORT: ${port}`)
-})
