@@ -1,5 +1,7 @@
 const blog = require('../Model/blog.js');
 
+
+// Create blog
 //const createBlog = async (req, res) => {
 exports.createBlog = async (req, res) => {
     try{
@@ -12,29 +14,34 @@ exports.createBlog = async (req, res) => {
     }
 }
 
+// Update a blog
 exports.updateBlog = async (req, res) => {
     try {
-            const myblog = await blog.findByIdAndUpdate(req.params.id,req.body, { new: true, runValidators: true });
-            res.status(201).json('Blog updated!\n',myblog)
-        } 
-    catch (err) {
-        res.status(404).json({message: err.message});
+        const myblog = await blog.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        if (!myblog) {
+            return res.status(400).json({ message: 'Blog not found' });
+        }
+        res.status(200).json({ message: 'Blog updated!', myblog });
+    } catch (err) {
+        res.status(400).json({ message: err.message });
     }
-}
+};
 
+// Get blog by id
 exports.getBlogByID = async (req, res) => {
     try {
-         const b_id = req.params.id;
-         if (b_id != -1) {
-            const myblog =await blog.findByID(b_id);
-            res.status(200).json(myblog);
+        const myblog = await blog.findById(req.params.id);
+        if (!myblog) {
+            res.status(400).json('Blog not found!');
         }
+            res.status(200).json({message: 'Blog!',  myblog});
     }
     catch (err) {
         res.status(404).json('Blog not found!');
     }
 }
 
+// Get all blogs
 exports.getAllBlog = async (req, res) => {
     try {
         const myblogs = await blog.find();
@@ -45,9 +52,10 @@ exports.getAllBlog = async (req, res) => {
     }
 }
 
+// Delete blog by id
 exports.deleteBlog = async (req, res) => {
     try {
-            const myblog = blog.findByIdAndDelete(req.params.id);
+            const myblog = await blog.findByIdAndDelete(req.params.id);
             if (!myblog) {
                 response.status(404).json({message: 'Blog not found'})
             }
