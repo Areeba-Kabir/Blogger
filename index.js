@@ -9,9 +9,9 @@ connection().then(
         console.log('Connected to database');
 
         app.use(express.json());
+        app.use(bloglogs('logs.txt'));
         app.use('/api/blog', blogroute);
         app.use(express.urlencoded({ extended: false }));
-        app.use(bloglogs('logs.txt'));
 
         const port = process.env.PORT || 3000;
         app.listen(port, () => {
