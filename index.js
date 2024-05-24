@@ -1,6 +1,7 @@
 const express = require('express');
 const connection = require('./connection');
 const blogroute = require('./Router/blogroutes.js');
+
 const bloglogs = require('./Middleware/bloglog.js');
 const app = express();
 
@@ -14,6 +15,7 @@ const app = express();
 
 
 app.use(express.json());
+app.set("view engine","ejs")
 app.use(bloglogs('logs.txt'));
 app.use('/api/blog', blogroute);
 app.use(express.urlencoded({ extended: false }));
